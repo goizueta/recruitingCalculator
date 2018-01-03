@@ -38,8 +38,8 @@ export default class Answers extends React.Component {
 
     const leftIndent = {
       textAlign: "left",
-      marginLeft: "20em",
-      marginRight: "20em",
+      marginLeft: "20%",
+      marginRight: "20%",
       textSize: "2em"
     }
 

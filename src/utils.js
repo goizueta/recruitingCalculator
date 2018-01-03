@@ -145,7 +145,7 @@ export default function simulate(
     }
 
     function grow_a_month(last_month_size) {
-        return Math.round(last_month_size * (1 + HC_GROWTH_RATE / 100))
+        return Math.round(last_month_size * getMonthlyGrowthRate(HC_GROWTH_RATE))
     }
 
     function attrite_employees() {
@@ -179,6 +179,12 @@ export default function simulate(
     function getMonthlyAttriteChance(yearly_chance) {
         var monthly_chance = 1 - Math.pow(1 - yearly_chance, 1 / 12)
         return monthly_chance
+    }
+
+    function getMonthlyGrowthRate(yearly_rate) {
+        var monthly_rate = Math.pow((1 + yearly_rate / 100), 1 / 12)
+        console.log(monthly_rate)
+        return monthly_rate
     }
 
     function getRandomInt(min, max) {

@@ -12,7 +12,7 @@ class App extends React.Component {
         "How big is your company currently?",
         "How many months do you want to forecast into the future?",
         "What is the yearly attrition rate at your company (in percentage points)?",
-        "What is your target monthly headcount growth rate (in percentage points)?"
+        "What is your target yearly headcount growth rate (in percentage points)?"
       ],
       answers: []
     }
