@@ -1,4 +1,5 @@
 import React from "react"
+import { LineChart } from "react-easy-chart"
 import simulate from "./utils.js"
 
 export default class Answers extends React.Component {
@@ -19,6 +20,20 @@ export default class Answers extends React.Component {
       currMonth: 0
     }
     console.log(returnObj)
+
+    var line_one = [] //with attrition
+    var line_two = [] //without attrition
+    for (var i = 0; i < this.state.months.length; i++) {
+      var new_employees_w_attrition = this.state.months[i].filter(function(x) {
+        return x <= i
+      }).length
+      var new_employees_wo_attrition =
+        this.state.months[i].length - Number(this.props.answers[0])
+
+      line_one.push({ x: i, y: new_employees_w_attrition })
+      line_two.push({ x: i, y: new_employees_wo_attrition })
+    }
+    this.data = [line_one, line_two]
   }
 
   render() {
@@ -64,12 +79,18 @@ export default class Answers extends React.Component {
             This means hiring a total of
             <span style={greenStyle}> {this.state.hired} employees</span>.
           </p>
+          <LineChart
+            axes
+            axisLabels={{ x: "Months", y: "Total New Hires" }}
+            grid
+            data={this.data}
+          />
         </div>
       )
     } else {
       setTimeout(() => {
         this.setState({ currMonth: this.state.currMonth + 1 })
-      }, 2000)
+      }, 100)
 
       console.log(this.state.currMonth)
       var row = ""

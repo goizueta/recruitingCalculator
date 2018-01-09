@@ -17,8 +17,10 @@ Searching online produced very few helpful results, so I decided to build a web 
 - Total employee hires needed to meet goals
 
 ### Installing and Running Locally
-`npm install`
-`npm start`
+```
+npm install
+npm start
+```
 
 ### Credits
 - Bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).

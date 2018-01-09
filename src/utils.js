@@ -10,14 +10,13 @@ export default function simulate(
         YEARLY_ATTRITE_CHANCE,
         HC_GROWTH_RATE
     )
-    var NUM_SIMULATIONS = 100
+    var NUM_SIMULATIONS = 3
 
     // Recruitment numbers by month, starting with month 0
     var target_size = [STARTING_COMPANY_SIZE]
     for (var i = 1; i < MONTHS_TO_SIMULATE + 1; i++) {
         target_size.push(grow_a_month(target_size[i - 1]))
     }
-    console.log(target_size)
 
     var hired_array = []
     var lost_array = []
@@ -40,6 +39,7 @@ export default function simulate(
         lost: avg(lost_array),
         company_history: companies_after_backfill
     }
+    console.log(companies_after_backfill)
 
     return return_obj
 
@@ -80,9 +80,9 @@ export default function simulate(
         var num_hired = hire_employees(month_index)
 
         // Only report for first sim
-        if (hired_array.length == 0) {
-            report_on_company(month_index, num_lost, num_hired)
-        }
+        //if (hired_array.length == 0) {
+        report_on_company(month_index, num_lost, num_hired)
+        //}
     }
 
     function report_on_company(month_index, num_lost, num_hired) {
@@ -122,6 +122,9 @@ export default function simulate(
 
             return num_to_hire
         }
+        // Add array of current company size
+        if (companies_after_backfill.length < MONTHS_TO_SIMULATE)
+            companies_after_backfill.push(company.slice())
 
         return 0
     }
@@ -145,7 +148,9 @@ export default function simulate(
     }
 
     function grow_a_month(last_month_size) {
-        return Math.round(last_month_size * getMonthlyGrowthRate(HC_GROWTH_RATE))
+        return Math.round(
+            last_month_size * getMonthlyGrowthRate(HC_GROWTH_RATE)
+        )
     }
 
     function attrite_employees() {
@@ -170,7 +175,10 @@ export default function simulate(
         var monthly_attrite_chance = getMonthlyAttriteChance(
             YEARLY_ATTRITE_CHANCE / 100
         )
-        if (Math.random() < monthly_attrite_chance) {
+        var random_chance = Math.random()
+        // console.log("Math " + random_chance + "chance: " + monthly_attrite_chance )
+        // console.log(random_chance < monthly_attrite_chance)
+        if (random_chance < monthly_attrite_chance) {
             return false
         }
         return true
@@ -182,8 +190,7 @@ export default function simulate(
     }
 
     function getMonthlyGrowthRate(yearly_rate) {
-        var monthly_rate = Math.pow((1 + yearly_rate / 100), 1 / 12)
-        console.log(monthly_rate)
+        var monthly_rate = Math.pow(1 + yearly_rate / 100, 1 / 12)
         return monthly_rate
     }
 
