@@ -23,15 +23,18 @@ export default class Answers extends React.Component {
 
     var line_one = [] //with attrition
     var line_two = [] //without attrition
+    var new_employees_w_attrition = 0
     for (var i = 0; i < this.state.months.length; i++) {
-      var new_employees_w_attrition = this.state.months[i].filter(function(x) {
-        return x <= i
+      new_employees_w_attrition += this.state.months[i].filter(function(x) {
+        return x == 0
       }).length
       var new_employees_wo_attrition =
         this.state.months[i].length - Number(this.props.answers[0])
 
-      line_one.push({ x: i, y: new_employees_w_attrition })
-      line_two.push({ x: i, y: new_employees_wo_attrition })
+      console.log("employees without attrition")
+      console.log(new_employees_wo_attrition)
+      line_one.push({ x: i + 1, y: new_employees_w_attrition })
+      line_two.push({ x: i + 1, y: new_employees_wo_attrition })
     }
     this.data = [line_one, line_two]
   }
@@ -58,33 +61,57 @@ export default class Answers extends React.Component {
       textSize: "2em"
     }
 
+    const yAxisStyle = {
+      transform: "rotate(-90deg)",
+      marginBottom: "-90px",
+      marginRight: "700px"
+    }
+
+    const topMargin = {
+      marginTop: "90px"
+    }
+
     if (this.state.currMonth >= this.props.answers[1]) {
       return (
         <div>
-          <h1>Here is your forecast after 1000 simulations:</h1>
-          Over {this.props.answers[1]} months
-          <p>
-            You will most likely lose{" "}
-            <span style={redStyle}>{this.state.lost} employees</span>
-          </p>
-          <p>
-            ... and have to hire{" "}
-            <span style={boldStyle}>
-              {this.state.months[this.state.months.length - 1].length -
-                this.props.answers[0]}{" "}
-            </span>
-            planned employees to hit your growth targets.
-          </p>
-          <p>
-            This means hiring a total of
-            <span style={greenStyle}> {this.state.hired} employees</span>.
-          </p>
+          <h2>Here is your median forecast after 5000 simulations</h2>
+          <div style={topMargin}>
+            <div style={yAxisStyle}>
+              <p>Total New Hires</p>
+            </div>
+          </div>
           <LineChart
             axes
+            margin={{ top: 10, right: 10, bottom: 25, left: 60 }}
             axisLabels={{ x: "Months", y: "Total New Hires" }}
             grid
+            width={700}
+            height={300}
             data={this.data}
           />
+          <div>
+            <p>Months</p>
+          </div>
+          <h2>Summary</h2>
+          <div style={leftIndent}>
+            Over {this.props.answers[1]} months
+            <p>
+              You will most likely lose{" "}
+              <span style={redStyle}>{this.state.lost} employees</span>
+            </p>
+            <p>
+              ... and have to hire{" "}
+              <span style={boldStyle}>
+                {this.state.months[this.state.months.length - 1].length -
+                  this.props.answers[0]}{" "}
+              </span>
+              planned employees to hit your growth targets.
+            </p>
+            <p>
+              This means hiring a total of
+              <span style={greenStyle}> {this.state.hired} employees</span>.
+            </p>
+          </div>
         </div>
       )
     } else {

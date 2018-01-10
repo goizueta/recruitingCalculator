@@ -10,7 +10,7 @@ export default function simulate(
         YEARLY_ATTRITE_CHANCE,
         HC_GROWTH_RATE
     )
-    var NUM_SIMULATIONS = 3
+    var NUM_SIMULATIONS = 5000
 
     // Recruitment numbers by month, starting with month 0
     var target_size = [STARTING_COMPANY_SIZE]
@@ -34,18 +34,58 @@ export default function simulate(
     console.log("Hired: " + avg(hired_array))
     console.log("Lost: " + avg(lost_array))
 
+    var median_company_history = get_median_company()
+
     var return_obj = {
-        hired: avg(hired_array),
-        lost: avg(lost_array),
-        company_history: companies_after_backfill
+        hired: get_median(hired_array),
+        lost: get_median(lost_array),
+        company_history: median_company_history
     }
-    console.log(companies_after_backfill)
+    console.log(median_company_history)
 
     return return_obj
 
     //
     // Helper functions
 
+    function get_median(arr) {
+        arr.sort((a, b) => {
+            return a - b
+        })
+        return arr[arr.length / 2]
+    }
+
+    function get_median_company() {
+        var simulations = []
+        for (
+            var i = 0;
+            i < companies_after_backfill.length / MONTHS_TO_SIMULATE;
+            i++
+        ) {
+            var new_sim = []
+            for (var j = 0; j < MONTHS_TO_SIMULATE; j++) {
+                new_sim.push(
+                    companies_after_backfill[i * MONTHS_TO_SIMULATE + j]
+                )
+            }
+            simulations.push(new_sim)
+        }
+        simulations.sort((a, b) => {
+            var count_new_hired_a = 0
+            var count_new_hired_b = 0
+            for (var i = 0; i < MONTHS_TO_SIMULATE; i++) {
+                count_new_hired_a += a[i].filter(function(x) {
+                    return x == 0
+                }).length
+
+                count_new_hired_b += b[i].filter(function(x) {
+                    return x == 0
+                }).length
+            }
+            return count_new_hired_b - count_new_hired_a
+        })
+        return simulations[simulations.length / 2]
+    }
     function run_full_simulation() {
         company = Array(target_size[0]).fill(0) // contains the number of months of age for the employee at index i
 
@@ -53,6 +93,7 @@ export default function simulate(
         for (var i = 1; i < MONTHS_TO_SIMULATE + 1; i++) {
             simulate_company_for_month(i)
         }
+        /*
         if (hired_array.length == 0) {
             console.log(
                 "-------------------------------------------------------------"
@@ -65,6 +106,7 @@ export default function simulate(
                     "Running " + NUM_SIMULATIONS + " additional simulations..."
                 )
         }
+        */
         clean_up_globals()
     }
 
@@ -80,9 +122,9 @@ export default function simulate(
         var num_hired = hire_employees(month_index)
 
         // Only report for first sim
-        //if (hired_array.length == 0) {
-        report_on_company(month_index, num_lost, num_hired)
-        //}
+        if (hired_array.length == 0) {
+            report_on_company(month_index, num_lost, num_hired)
+        }
     }
 
     function report_on_company(month_index, num_lost, num_hired) {
@@ -108,23 +150,18 @@ export default function simulate(
         var curr_company_size = get_company_size()
         if (target_size[month_index] > curr_company_size) {
             var num_to_hire = target_size[month_index] - curr_company_size
-            // console.log("Time to hire!")
-            // console.log("Current Size: " + curr_company_size + " Target Size: " + target_size[month_index])
-            // console.log("Hiring " + num_to_hire + " new employees")
             total_employees_to_hire += num_to_hire
             backfill_employees()
             while (target_size[month_index] > get_company_size()) {
                 company.push(0)
             }
             // Add array of current company size
-            if (companies_after_backfill.length < MONTHS_TO_SIMULATE)
-                companies_after_backfill.push(company.slice())
+            companies_after_backfill.push(company.slice())
 
             return num_to_hire
         }
         // Add array of current company size
-        if (companies_after_backfill.length < MONTHS_TO_SIMULATE)
-            companies_after_backfill.push(company.slice())
+        companies_after_backfill.push(company.slice())
 
         return 0
     }
