@@ -1,6 +1,8 @@
 import React from "react"
 import { LineChart } from "react-easy-chart"
 import { Legend } from "react-easy-chart"
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider"
+import RaisedButton from "material-ui/RaisedButton"
 import simulate from "./utils.js"
 import MonthTable from "./MonthTable"
 
@@ -78,6 +80,10 @@ export default class Answers extends React.Component {
       { key: this.props.answers[2] + "% Attrition", value: 200, color: "green" }
     ]
 
+    const buttonStyle = {
+      margin: 12
+    }
+
     const config = [{ color: "blue" }, { color: "green" }]
 
     if (this.state.currMonth >= this.props.answers[1]) {
@@ -128,7 +134,7 @@ export default class Answers extends React.Component {
         </div>
       )
     } else {
-      setTimeout(() => {
+      this.timeout = setTimeout(() => {
         this.setState({ currMonth: this.state.currMonth + 1 })
       }, 1000)
 
@@ -170,6 +176,16 @@ export default class Answers extends React.Component {
             &nbsp;&nbsp;&nbsp;&nbsp; 💀 = 1 lost employee <br />
           </p>
           <p style={leftIndent}>{row}</p>
+          <MuiThemeProvider>
+            <RaisedButton
+              label="Skip"
+              style={buttonStyle}
+              onClick={function() {
+                clearTimeout(this.timeout)
+                this.setState({ currMonth: this.props.answers[1] })
+              }.bind(this)}
+            />
+          </MuiThemeProvider>
         </div>
       )
     }
