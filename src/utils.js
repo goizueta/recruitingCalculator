@@ -10,7 +10,7 @@ export default function simulate(
         YEARLY_ATTRITE_CHANCE,
         HC_GROWTH_RATE
     )
-    var NUM_SIMULATIONS = 5000
+    var NUM_SIMULATIONS = 10
 
     // Recruitment numbers by month, starting with month 0
     var target_size = [STARTING_COMPANY_SIZE]
@@ -28,11 +28,6 @@ export default function simulate(
     for (var i = 0; i < NUM_SIMULATIONS; i++) {
         run_full_simulation()
     }
-
-    console.log("-------------------------------------------------------------")
-    console.log("__AVG OVER " + NUM_SIMULATIONS + " SIMULATIONS__")
-    console.log("Hired: " + avg(hired_array))
-    console.log("Lost: " + avg(lost_array))
 
     var median_company_history = get_median_company()
 
@@ -122,9 +117,9 @@ export default function simulate(
         var num_hired = hire_employees(month_index)
 
         // Only report for first sim
-        if (hired_array.length == 0) {
-            report_on_company(month_index, num_lost, num_hired)
-        }
+        // if (hired_array.length == 0) {
+        //     report_on_company(month_index, num_lost, num_hired)
+        // }
     }
 
     function report_on_company(month_index, num_lost, num_hired) {
@@ -191,7 +186,6 @@ export default function simulate(
     }
 
     function attrite_employees() {
-        // console.log('Employees are considering leaving...')
         for (var i = 0; i < company.length; i++) {
             var employee = company[i]
             if (!is_employee_still_here()) {
@@ -204,7 +198,6 @@ export default function simulate(
         var num_attrited = company.length - get_company_size()
         total_employees_attrited += num_attrited
 
-        // num_attrited > 0 ? console.log("Lost " + num_attrited + " good (wo)men out there...") : console.log("Phew...they all stayed")
         return num_attrited
     }
 
@@ -213,8 +206,6 @@ export default function simulate(
             YEARLY_ATTRITE_CHANCE / 100
         )
         var random_chance = Math.random()
-        // console.log("Math " + random_chance + "chance: " + monthly_attrite_chance )
-        // console.log(random_chance < monthly_attrite_chance)
         if (random_chance < monthly_attrite_chance) {
             return false
         }

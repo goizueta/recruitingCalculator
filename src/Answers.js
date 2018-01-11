@@ -89,7 +89,7 @@ export default class Answers extends React.Component {
     if (this.state.currMonth >= this.props.answers[1]) {
       return (
         <div>
-          <h2>Here is your median forecast after 5000 simulations</h2>
+          <h2>Here is your median forecast after 1000 simulations</h2>
           <div style={topMargin}>
             <div style={yAxisStyle}>
               <p>Total New Hires</p>
@@ -175,7 +175,6 @@ export default class Answers extends React.Component {
             👩‍💼 = 1 employee &nbsp;&nbsp;&nbsp;&nbsp; ➕ = 1 hired employee
             &nbsp;&nbsp;&nbsp;&nbsp; 💀 = 1 lost employee <br />
           </p>
-          <p style={leftIndent}>{row}</p>
           <MuiThemeProvider>
             <RaisedButton
               label="Skip"
@@ -186,6 +185,7 @@ export default class Answers extends React.Component {
               }.bind(this)}
             />
           </MuiThemeProvider>
+          <p style={leftIndent}>{row}</p>
         </div>
       )
     }
