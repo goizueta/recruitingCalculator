@@ -1,6 +1,8 @@
 import React from "react"
 import { LineChart } from "react-easy-chart"
+import { Legend } from "react-easy-chart"
 import simulate from "./utils.js"
+import MonthTable from "./MonthTable"
 
 export default class Answers extends React.Component {
   constructor(props) {
@@ -71,6 +73,13 @@ export default class Answers extends React.Component {
       marginTop: "90px"
     }
 
+    const legendData = [
+      { key: "0% Attrition", value: 100, color: "blue" },
+      { key: this.props.answers[2] + "% Attrition", value: 200, color: "green" }
+    ]
+
+    const config = [{ color: "blue" }, { color: "green" }]
+
     if (this.state.currMonth >= this.props.answers[1]) {
       return (
         <div>
@@ -82,6 +91,7 @@ export default class Answers extends React.Component {
           </div>
           <LineChart
             axes
+            lineColors={["green", "blue"]}
             margin={{ top: 10, right: 10, bottom: 25, left: 60 }}
             axisLabels={{ x: "Months", y: "Total New Hires" }}
             grid
@@ -92,6 +102,8 @@ export default class Answers extends React.Component {
           <div>
             <p>Months</p>
           </div>
+
+          <Legend data={legendData} dataId={"key"} config={config} horizontal />
           <h2>Summary</h2>
           <div style={leftIndent}>
             Over {this.props.answers[1]} months
@@ -112,12 +124,13 @@ export default class Answers extends React.Component {
               <span style={greenStyle}> {this.state.hired} employees</span>.
             </p>
           </div>
+          <MonthTable months={this.data[0]} />
         </div>
       )
     } else {
       setTimeout(() => {
         this.setState({ currMonth: this.state.currMonth + 1 })
-      }, 100)
+      }, 1000)
 
       console.log(this.state.currMonth)
       var row = ""
