@@ -29,7 +29,7 @@ export default class Form extends React.Component {
 
   render() {
     const redStyle = {
-      color: "red",
+      color: "#c30",
       fontWeight: "lighter"
     }
 

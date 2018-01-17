@@ -14,6 +14,12 @@ class App extends React.Component {
         "What is the yearly attrition rate at your company (in percentage points)?",
         "What is your target yearly headcount growth rate (in percentage points)?"
       ],
+      hints: [
+        "(Examples: 10 or 100)",
+        "(12 or 6 months is most common)",
+        "(20 is the average for a US startup)",
+        "(100 if you want to double in a year)"
+      ],
       answers: []
     }
 
@@ -30,11 +36,18 @@ class App extends React.Component {
       textAlign: "center"
     }
 
+    const hintStyle = {
+      color: "#8a8c8c",
+      fontStyle: "italic",
+      fontSize: ".9em"
+    }
+
     if (this.state.questionIndex < 4) {
       return (
         <div style={style}>
           <h1>Recruiting Calculator</h1>
           <h3>{this.state.questions[this.state.questionIndex]}</h3>
+          <p style={hintStyle}>{this.state.hints[this.state.questionIndex]}</p>
           <Form handleSubmit={this.handleSubmit} />
         </div>
       )
