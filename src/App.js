@@ -16,7 +16,7 @@ class App extends React.Component {
       ],
       hints: [
         "(Examples: 10 or 100)",
-        "(12 or 6 months is most common)",
+        "(Example: 12 for a full year)",
         "(20 is the average for a US startup)",
         "(100 if you want to double in a year)"
       ],
@@ -33,7 +33,8 @@ class App extends React.Component {
 
   render() {
     const style = {
-      textAlign: "center"
+      textAlign: "center",
+      fontFamily: "Roboto, sans-serif"
     }
 
     const hintStyle = {

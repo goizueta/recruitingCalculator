@@ -10,7 +10,7 @@ export default function simulate(
         YEARLY_ATTRITE_CHANCE,
         HC_GROWTH_RATE
     )
-    var NUM_SIMULATIONS = 10
+    var NUM_SIMULATIONS = 1000
 
     // Recruitment numbers by month, starting with month 0
     var target_size = [STARTING_COMPANY_SIZE]
