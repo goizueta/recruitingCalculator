@@ -4,13 +4,7 @@ export default function simulate(
     YEARLY_ATTRITE_CHANCE,
     HC_GROWTH_RATE
 ) {
-    console.log(
-        STARTING_COMPANY_SIZE,
-        MONTHS_TO_SIMULATE,
-        YEARLY_ATTRITE_CHANCE,
-        HC_GROWTH_RATE
-    )
-    var NUM_SIMULATIONS = 1000
+    const NUM_SIMULATIONS = 1000
 
     // Recruitment numbers by month, starting with month 0
     var target_size = [STARTING_COMPANY_SIZE]
@@ -25,7 +19,7 @@ export default function simulate(
     var total_employees_attrited = 0
     var company = Array(target_size[0]).fill(0) // contains the number of months of age for the employee at index i
 
-    for (var i = 0; i < NUM_SIMULATIONS; i++) {
+    for (var k = 0; k < NUM_SIMULATIONS; k++) {
         run_full_simulation()
     }
 
@@ -70,11 +64,11 @@ export default function simulate(
             var count_new_hired_b = 0
             for (var i = 0; i < MONTHS_TO_SIMULATE; i++) {
                 count_new_hired_a += a[i].filter(function(x) {
-                    return x == 0
+                    return x === 0
                 }).length
 
                 count_new_hired_b += b[i].filter(function(x) {
-                    return x == 0
+                    return x === 0
                 }).length
             }
             return count_new_hired_b - count_new_hired_a
@@ -88,20 +82,6 @@ export default function simulate(
         for (var i = 1; i < MONTHS_TO_SIMULATE + 1; i++) {
             simulate_company_for_month(i)
         }
-        /*
-        if (hired_array.length == 0) {
-            console.log(
-                "-------------------------------------------------------------"
-            )
-            console.log("__TOTAL__")
-            console.log("Hired: " + total_employees_to_hire)
-            console.log("Lost: " + total_employees_attrited)
-            if (NUM_SIMULATIONS > 1)
-                console.log(
-                    "Running " + NUM_SIMULATIONS + " additional simulations..."
-                )
-        }
-        */
         clean_up_globals()
     }
 
@@ -113,31 +93,8 @@ export default function simulate(
     }
 
     function simulate_company_for_month(month_index) {
-        var num_lost = attrite_employees()
-        var num_hired = hire_employees(month_index)
-
-        // Only report for first sim
-        // if (hired_array.length == 0) {
-        //     report_on_company(month_index, num_lost, num_hired)
-        // }
-    }
-
-    function report_on_company(month_index, num_lost, num_hired) {
-        var prev_size =
-            month_index > 0
-                ? target_size[month_index - 1]
-                : STARTING_COMPANY_SIZE
-
-        console.log(
-            "------------------ End of Month " +
-                month_index +
-                " ---------------------------"
-        )
-        console.log("--- Company Size Last Month: " + prev_size)
-        console.log("--- Company Size This Month: " + company.length)
-        console.log("--- Lost this month: " + num_lost)
-        console.log("--- Hired this month: " + num_hired)
-        console.log("--- Age in months of employees: " + company)
+        attrite_employees()
+        hire_employees(month_index)
     }
 
     // Making assumption here that we always hire every month to hit our target size
@@ -163,7 +120,7 @@ export default function simulate(
 
     function backfill_employees() {
         for (var i = 0; i < company.length; i++) {
-            if (company[i] == -1) {
+            if (company[i] === -1) {
                 company[i] = 0
             }
         }
@@ -172,7 +129,7 @@ export default function simulate(
     function get_company_size() {
         var count = 0
         for (var i = 0; i < company.length; i++) {
-            if (company[i] != -1) {
+            if (company[i] !== -1) {
                 count++
             }
         }
@@ -187,7 +144,6 @@ export default function simulate(
 
     function attrite_employees() {
         for (var i = 0; i < company.length; i++) {
-            var employee = company[i]
             if (!is_employee_still_here()) {
                 // If the person hasn't attrited yet
                 company[i] = -1
@@ -222,16 +178,22 @@ export default function simulate(
         return monthly_rate
     }
 
-    function getRandomInt(min, max) {
-        min = Math.ceil(min)
-        max = Math.floor(max)
-        return Math.floor(Math.random() * (max - min)) + min //The maximum is exclusive and the minimum is inclusive
-    }
+    // Console logging to assist with debugging
+    // function report_on_company(month_index, num_lost, num_hired) {
+    //     var prev_size =
+    //         month_index > 0
+    //             ? target_size[month_index - 1]
+    //             : STARTING_COMPANY_SIZE
 
-    function avg(arr) {
-        var sum = arr.reduce(function(a, b) {
-            return a + b
-        })
-        return Math.round(sum / arr.length)
-    }
+    //     console.log(
+    //         "------------------ End of Month " +
+    //             month_index +
+    //             " ---------------------------"
+    //     )
+    //     console.log("--- Company Size Last Month: " + prev_size)
+    //     console.log("--- Company Size This Month: " + company.length)
+    //     console.log("--- Lost this month: " + num_lost)
+    //     console.log("--- Hired this month: " + num_hired)
+    //     console.log("--- Age in months of employees: " + company)
+    // }
 }

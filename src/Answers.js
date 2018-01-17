@@ -23,20 +23,17 @@ export default class Answers extends React.Component {
       months: returnObj.company_history,
       currMonth: 0
     }
-    console.log(returnObj)
 
     var line_one = [] //with attrition
     var line_two = [] //without attrition
     var new_employees_w_attrition = 0
     for (var i = 0; i < this.state.months.length; i++) {
       new_employees_w_attrition += this.state.months[i].filter(function(x) {
-        return x == 0
+        return x === 0
       }).length
       var new_employees_wo_attrition =
         this.state.months[i].length - Number(this.props.answers[0])
 
-      console.log("employees without attrition")
-      console.log(new_employees_wo_attrition)
       line_one.push({ x: i + 1, y: new_employees_w_attrition })
       line_two.push({ x: i + 1, y: new_employees_wo_attrition })
     }
@@ -138,7 +135,6 @@ export default class Answers extends React.Component {
         this.setState({ currMonth: this.state.currMonth + 1 })
       }, 1000)
 
-      console.log(this.state.currMonth)
       var row = ""
       var companySize = this.state.months[this.state.currMonth].length
       var lostEmployees = 0

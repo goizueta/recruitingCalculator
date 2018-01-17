@@ -14,7 +14,7 @@ export default class Form extends React.Component {
 
   handleChange(event) {
     var re = /^[0-9]+$/
-    if (re.test(event.target.value) || event.target.value == "") {
+    if (re.test(event.target.value) || event.target.value === "") {
       this.setState({ value: event.target.value, disabled: false })
     } else {
       this.setState({ value: event.target.value, disabled: true })

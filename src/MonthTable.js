@@ -1,5 +1,4 @@
 import React from "react"
-import ReactDOM from "react-dom"
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider"
 import {
     Table,
@@ -17,7 +16,7 @@ export default class MonthTable extends React.Component {
         var months = this.props.months
         // Makes the employee additions discrete instead of cumulative
         for (var i = months.length - 1; i > -1; i--) {
-            if (i != 0) {
+            if (i !== 0) {
                 months[i].y -= months[i - 1].y
             }
         }
