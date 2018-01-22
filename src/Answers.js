@@ -18,26 +18,37 @@ export default class Answers extends React.Component {
     )
 
     this.state = {
-      hired: returnObj.hired,
-      lost: returnObj.lost,
-      months: returnObj.company_history,
+      med_hired: returnObj.med_hired,
+      med_lost: returnObj.med_lost,
+      months: returnObj.med_company_history,
+      worst_hired: returnObj.worst_hired,
+      worst_lost: returnObj.worst_lost,
+      worst_months: returnObj.worst_company_history,
       currMonth: 0
     }
 
     var line_one = [] //with attrition
     var line_two = [] //without attrition
+    var line_three = [] //worst 10%
     var new_employees_w_attrition = 0
+    var new_employees_w_worst_attrition = 0
     for (var i = 0; i < this.state.months.length; i++) {
       new_employees_w_attrition += this.state.months[i].filter(function(x) {
         return x === 0
       }).length
+      new_employees_w_worst_attrition += this.state.worst_months[i].filter(
+        function(x) {
+          return x === 0
+        }
+      ).length
       var new_employees_wo_attrition =
         this.state.months[i].length - Number(this.props.answers[0])
 
       line_one.push({ x: i + 1, y: new_employees_w_attrition })
       line_two.push({ x: i + 1, y: new_employees_wo_attrition })
+      line_three.push({ x: i + 1, y: new_employees_w_worst_attrition })
     }
-    this.data = [line_one, line_two]
+    this.data = [line_three, line_one, line_two]
   }
 
   render() {
@@ -73,20 +84,38 @@ export default class Answers extends React.Component {
     }
 
     const legendData = [
-      { key: "0% Attrition", value: 100, color: "blue" },
-      { key: this.props.answers[2] + "% Attrition", value: 200, color: "green" }
+      {
+        key: this.props.answers[2] + "% Attrition (10th percentile)",
+        value: 300,
+        color: "#4A6670"
+      },
+      {
+        key: this.props.answers[2] + "% Attrition (median)",
+        value: 200,
+        color: "#668F80"
+      },
+      { key: "0% Attrition", value: 100, color: "#C3B59F" }
     ]
 
     const buttonStyle = {
       margin: 12
     }
 
-    const config = [{ color: "blue" }, { color: "green" }]
+    const h4Style = {
+      color: "grey"
+    }
+
+    const config = [
+      { color: "#4A6670" },
+      { color: "#668F80" },
+      { color: "#C3B59F" }
+    ]
 
     if (this.state.currMonth >= this.props.answers[1]) {
       return (
         <div>
-          <h2>Here is your median forecast after 1000 simulations</h2>
+          <h2>Projected Hiring Forecast</h2>
+          <h4 style={h4Style}>after 1000 simulations</h4>
           <div style={topMargin}>
             <div style={yAxisStyle}>
               <p>Total New Hires</p>
@@ -94,7 +123,7 @@ export default class Answers extends React.Component {
           </div>
           <LineChart
             axes
-            lineColors={["green", "blue"]}
+            lineColors={["#4A6670", "#668F80", "#C3B59F"]}
             margin={{ top: 10, right: 10, bottom: 25, left: 60 }}
             axisLabels={{ x: "Months", y: "Total New Hires" }}
             grid
@@ -112,7 +141,7 @@ export default class Answers extends React.Component {
             Over {this.props.answers[1]} months
             <p>
               You will most likely lose{" "}
-              <span style={redStyle}>{this.state.lost} employees</span>
+              <span style={redStyle}>{this.state.med_lost} employees</span>
             </p>
             <p>
               ... and have to hire{" "}
@@ -124,10 +153,10 @@ export default class Answers extends React.Component {
             </p>
             <p>
               This means hiring a total of
-              <span style={greenStyle}> {this.state.hired} employees</span>.
+              <span style={greenStyle}> {this.state.med_hired} employees</span>.
             </p>
           </div>
-          <MonthTable months={this.data[0]} />
+          <MonthTable med_months={this.data[0]} worst_months={this.data[2]} />
         </div>
       )
     } else {

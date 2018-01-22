@@ -13,16 +13,24 @@ export default class MonthTable extends React.Component {
     constructor(props) {
         super(props)
 
-        var months = this.props.months
+        var med_months = this.props.med_months
+        var worst_months = this.props.worst_months
         // Makes the employee additions discrete instead of cumulative
-        for (var i = months.length - 1; i > -1; i--) {
+        for (var i = med_months.length - 1; i > -1; i--) {
             if (i !== 0) {
-                months[i].y -= months[i - 1].y
+                med_months[i].y -= med_months[i - 1].y
             }
         }
 
+        for (var i = worst_months.length - 1; i > -1; i--) {
+            if (i !== 0) {
+                worst_months[i].y -= worst_months[i - 1].y
+            }
+            med_months[i].z = worst_months[i].y
+        }
+
         this.state = {
-            months: months
+            med_months: med_months
         }
     }
 
@@ -58,12 +66,12 @@ export default class MonthTable extends React.Component {
                                     Month
                                 </TableHeaderColumn>
                                 <TableHeaderColumn style={headerStyle}>
-                                    Employees To Hire
+                                    Hires (Median Case)
                                 </TableHeaderColumn>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {this.state.months.map(row => {
+                            {this.state.med_months.map(row => {
                                 return <TRow key={row.x} row={row} />
                             })}
                         </TableBody>

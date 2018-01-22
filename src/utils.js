@@ -27,13 +27,16 @@ export default function simulate(
     }
 
     var median_company_history = get_median_company()
+    var worst_company_history = get_worst_company()
 
     var return_obj = {
-        hired: get_median(hired_array),
-        lost: get_median(lost_array),
-        company_history: median_company_history
+        med_hired: get_median(hired_array),
+        med_lost: get_median(lost_array),
+        med_company_history: median_company_history,
+        worst_hired: get_worst_elem(hired_array),
+        worst_lost: get_worst_elem(lost_array),
+        worst_company_history: worst_company_history
     }
-    console.log(median_company_history)
 
     return return_obj
 
@@ -47,7 +50,26 @@ export default function simulate(
         return arr[arr.length / 2]
     }
 
+    function get_worst_elem(arr) {
+        arr.sort((a, b) => {
+            return a - b
+        })
+        return arr[arr.length * 9 / 10]
+    }
+
     function get_median_company() {
+        var simulations = get_sorted_sims()
+
+        return simulations[simulations.length / 2]
+    }
+
+    function get_worst_company() {
+        var simulations = get_sorted_sims()
+
+        return simulations[simulations.length * 9 / 10]
+    }
+
+    function get_sorted_sims() {
         var simulations = []
         var num_simulations =
             company_months_after_backfill.length / MONTHS_TO_SIMULATE
@@ -64,7 +86,7 @@ export default function simulate(
         }
         simulations.sort(sort_by_new_hires)
 
-        return simulations[simulations.length / 2]
+        return simulations
     }
 
     function sort_by_new_hires(a, b) {
@@ -74,7 +96,7 @@ export default function simulate(
             count_new_hired_a += a[i].filter(is_zero).length
             count_new_hired_b += b[i].filter(is_zero).length
         }
-        return count_new_hired_b - count_new_hired_a
+        return count_new_hired_a - count_new_hired_b
     }
 
     function is_zero(x) {
