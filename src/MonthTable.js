@@ -48,9 +48,15 @@ export default class MonthTable extends React.Component {
             fontSize: "1.2em"
         }
 
+        const leftHeaderStyle = {
+            fontSize: "1.2em",
+            width: "3em"
+        }
+
         const centerStyle = {
-            marginLeft: "32%",
-            marginRight: "32%"
+            marginLeft: "25%",
+            marginRight: "25%",
+            marginBottom: "10rem"
         }
 
         return (
@@ -62,7 +68,7 @@ export default class MonthTable extends React.Component {
                             displaySelectAll={false}
                         >
                             <TableRow>
-                                <TableHeaderColumn style={headerStyle}>
+                                <TableHeaderColumn style={leftHeaderStyle}>
                                     Month
                                 </TableHeaderColumn>
                                 <TableHeaderColumn style={headerStyle}>

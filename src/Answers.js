@@ -16,6 +16,8 @@ export default class Answers extends React.Component {
       Number(this.props.answers[3])
     )
 
+    const initialWidth = window.innerWidth > 0 ? window.innerWidth : 500
+
     this.state = {
       med_hired: returnObj.med_hired,
       med_lost: returnObj.med_lost,
@@ -23,7 +25,9 @@ export default class Answers extends React.Component {
       worst_hired: returnObj.worst_hired,
       worst_lost: returnObj.worst_lost,
       worst_months: returnObj.worst_company_history,
-      currMonth: 0
+      currMonth: 0,
+      showToolTip: false,
+      windowWidth: initialWidth / 2
     }
 
     var line_one = [] //with attrition
@@ -50,6 +54,20 @@ export default class Answers extends React.Component {
     this.data = [line_three, line_one, line_two]
   }
 
+  componentDidMount() {
+    window.addEventListener("resize", this.handleResize.bind(this))
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize)
+  }
+
+  handleResize() {
+    window.innerWidth > 600
+      ? this.setState({ windowWidth: window.innerWidth / 2 })
+      : this.setState({ windowWidth: window.innerWidth * 0.7 })
+  }
+
   render() {
     const greenStyle = {
       color: "green",
@@ -73,13 +91,20 @@ export default class Answers extends React.Component {
     }
 
     const yAxisStyle = {
-      transform: "rotate(-90deg)",
-      marginBottom: "-90px",
-      marginRight: "700px"
+      textAlign: "left",
+      marginBottom: "0px"
     }
 
     const topMargin = {
-      marginTop: "90px"
+      marginTop: "3rem"
+    }
+
+    const scrollDown = {
+      marginTop: "20rem"
+    }
+
+    const scrollWayDown = {
+      marginTop: "40rem"
     }
 
     const legendData = [
@@ -116,22 +141,18 @@ export default class Answers extends React.Component {
 
     if (this.state.currMonth >= this.props.answers[1]) {
       return (
-        <div>
-          <h2>Projected Hiring Forecast</h2>
-          <h4 style={h4Style}>after 1000 simulations</h4>
-          <div style={topMargin}>
-            <div style={yAxisStyle}>
-              <p>Total New Hires</p>
-            </div>
-          </div>
+        <div className="container">
+          <h2 className="tagline-line1">Projected Hiring Forecast</h2>
+          <h2 className="tagline-line2">after 1000 simulations</h2>
+          <h6 style={yAxisStyle}>Total New Hires</h6>
           <LineChart
             axes
             lineColors={["#4A6670", "#668F80", "#C3B59F"]}
             margin={{ top: 10, right: 10, bottom: 25, left: 60 }}
-            axisLabels={{ x: "Months", y: "Total New Hires" }}
+            axisLabels={{ x: "NOT WORKING", y: "NOT WORKING" }}
             grid
-            width={700}
-            height={300}
+            width={this.state.windowWidth}
+            height={this.state.windowWidth / 2}
             data={this.data}
           />
           <div>
@@ -139,7 +160,9 @@ export default class Answers extends React.Component {
           </div>
 
           <Legend data={legendData} dataId={"key"} config={config} horizontal />
-          <h2>Summary</h2>
+          <h2 className="tagline-line1" style={scrollDown}>
+            Summary
+          </h2>
           <div style={leftIndent}>
             Over {this.props.answers[1]} months
             <p>
@@ -159,6 +182,9 @@ export default class Answers extends React.Component {
               <span style={greenStyle}> {this.state.med_hired} employees</span>.
             </p>
           </div>
+          <h2 className="tagline-line1" style={scrollWayDown}>
+            Monthly Hiring Plan
+          </h2>
           <MonthTable med_months={this.data[0]} worst_months={this.data[2]} />
         </div>
       )
