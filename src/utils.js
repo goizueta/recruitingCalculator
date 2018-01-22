@@ -1,10 +1,13 @@
 export default function simulate(
     STARTING_COMPANY_SIZE,
     MONTHS_TO_SIMULATE,
-    YEARLY_ATTRITE_CHANCE,
+    LOST_EMPLOYEES_LAST_YEAR,
     HC_GROWTH_RATE
 ) {
     const NUM_SIMULATIONS = 1000
+    const YEARLY_ATTRITE_CHANCE =
+        LOST_EMPLOYEES_LAST_YEAR / STARTING_COMPANY_SIZE
+    console.log(YEARLY_ATTRITE_CHANCE)
 
     // Recruitment numbers by month, starting with month 0
     var target_size = [STARTING_COMPANY_SIZE]
@@ -14,7 +17,7 @@ export default function simulate(
 
     var hired_array = []
     var lost_array = []
-    var companies_after_backfill = []
+    var company_months_after_backfill = []
     var total_employees_to_hire = 0
     var total_employees_attrited = 0
     var company = Array(target_size[0]).fill(0) // contains the number of months of age for the employee at index i
@@ -46,35 +49,38 @@ export default function simulate(
 
     function get_median_company() {
         var simulations = []
-        for (
-            var i = 0;
-            i < companies_after_backfill.length / MONTHS_TO_SIMULATE;
-            i++
-        ) {
+        var num_simulations =
+            company_months_after_backfill.length / MONTHS_TO_SIMULATE
+
+        // Transform 1D company_months array into 2D simulations array and sort by new hires
+        for (var i = 0; i < num_simulations; i++) {
             var new_sim = []
             for (var j = 0; j < MONTHS_TO_SIMULATE; j++) {
                 new_sim.push(
-                    companies_after_backfill[i * MONTHS_TO_SIMULATE + j]
+                    company_months_after_backfill[i * MONTHS_TO_SIMULATE + j]
                 )
             }
             simulations.push(new_sim)
         }
-        simulations.sort((a, b) => {
-            var count_new_hired_a = 0
-            var count_new_hired_b = 0
-            for (var i = 0; i < MONTHS_TO_SIMULATE; i++) {
-                count_new_hired_a += a[i].filter(function(x) {
-                    return x === 0
-                }).length
+        simulations.sort(sort_by_new_hires)
 
-                count_new_hired_b += b[i].filter(function(x) {
-                    return x === 0
-                }).length
-            }
-            return count_new_hired_b - count_new_hired_a
-        })
         return simulations[simulations.length / 2]
     }
+
+    function sort_by_new_hires(a, b) {
+        var count_new_hired_a = 0
+        var count_new_hired_b = 0
+        for (var i = 0; i < MONTHS_TO_SIMULATE; i++) {
+            count_new_hired_a += a[i].filter(is_zero).length
+            count_new_hired_b += b[i].filter(is_zero).length
+        }
+        return count_new_hired_b - count_new_hired_a
+    }
+
+    function is_zero(x) {
+        return x === 0
+    }
+
     function run_full_simulation() {
         company = Array(target_size[0]).fill(0) // contains the number of months of age for the employee at index i
 
@@ -108,12 +114,12 @@ export default function simulate(
                 company.push(0)
             }
             // Add array of current company size
-            companies_after_backfill.push(company.slice())
+            company_months_after_backfill.push(company.slice())
 
             return num_to_hire
         }
         // Add array of current company size
-        companies_after_backfill.push(company.slice())
+        company_months_after_backfill.push(company.slice())
 
         return 0
     }
@@ -159,7 +165,7 @@ export default function simulate(
 
     function is_employee_still_here() {
         var monthly_attrite_chance = getMonthlyAttriteChance(
-            YEARLY_ATTRITE_CHANCE / 100
+            YEARLY_ATTRITE_CHANCE
         )
         var random_chance = Math.random()
         if (random_chance < monthly_attrite_chance) {

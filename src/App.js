@@ -11,13 +11,13 @@ class App extends React.Component {
       questions: [
         "How big is your company currently?",
         "How many months do you want to forecast into the future?",
-        "What is the yearly attrition rate at your company (in percentage points)?",
+        "How many employees left your company in the past year?",
         "What is your target yearly headcount growth rate (in percentage points)?"
       ],
       hints: [
         "(Examples: 10 or 100)",
         "(Example: 12 for a full year)",
-        "(20 is the average for a US startup)",
+        "(Example: 15)",
         "(100 if you want to double in a year)"
       ],
       answers: []
