@@ -2,7 +2,6 @@ import React from "react"
 import { LineChart } from "react-easy-chart"
 import { Legend } from "react-easy-chart"
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider"
-import RaisedButton from "material-ui/RaisedButton"
 import simulate from "./utils.js"
 import MonthTable from "./MonthTable"
 
@@ -68,7 +67,7 @@ export default class Answers extends React.Component {
 
     const leftIndent = {
       textAlign: "left",
-      marginLeft: "20%",
+      marginRight: "20%",
       marginRight: "20%",
       textSize: "2em"
     }
@@ -110,6 +109,10 @@ export default class Answers extends React.Component {
       { color: "#668F80" },
       { color: "#C3B59F" }
     ]
+
+    const headerStyle = {
+      marginTop: "4 rem"
+    }
 
     if (this.state.currMonth >= this.props.answers[1]) {
       return (
@@ -186,31 +189,30 @@ export default class Answers extends React.Component {
         }
       }
       return (
-        <div>
-          <h1>Simulating {this.props.answers[1]} Months ...</h1>
-          <h3>
+        <div className="container">
+          <h2 className="tagline-line1">
+            Simulating {this.props.answers[1]} Months ...
+          </h2>
+          <h2 className="tagline-line2">
             After {this.state.currMonth + 1} Months <br />
-          </h3>
+          </h2>
+          <p style={leftIndent}>{row}</p>
           <p style={leftIndent}>
-            Employees Lost This Month: {lostEmployees} <br />
-            New Employees This Month: {newEmployees} <br />
-            <br />
-            Total Company Size: {companySize} <br />
-            <br />
             👩‍💼 = 1 employee &nbsp;&nbsp;&nbsp;&nbsp; ➕ = 1 hired employee
             &nbsp;&nbsp;&nbsp;&nbsp; 💀 = 1 lost employee <br />
+            Total Company Size: {companySize} <br />
           </p>
           <MuiThemeProvider>
-            <RaisedButton
-              label="Skip"
+            <button
               style={buttonStyle}
               onClick={function() {
                 clearTimeout(this.timeout)
                 this.setState({ currMonth: this.props.answers[1] })
               }.bind(this)}
-            />
+            >
+              Skip
+            </button>
           </MuiThemeProvider>
-          <p style={leftIndent}>{row}</p>
         </div>
       )
     }

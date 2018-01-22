@@ -41,6 +41,7 @@ export default class Form extends React.Component {
             value={this.state.value}
             onChange={this.handleChange}
           />
+          <br />
           <input type="submit" value="Submit" disabled={this.state.disabled} />
         </form>
         <p hidden={!this.state.disabled} style={redStyle}>

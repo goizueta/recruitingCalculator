@@ -2,6 +2,8 @@ import React from "react"
 import PropTypes from "prop-types"
 import Form from "./Form"
 import Answers from "./Answers"
+import "./normalize.css"
+import "./skeleton.css"
 
 class App extends React.Component {
   constructor() {
@@ -34,27 +36,33 @@ class App extends React.Component {
   render() {
     const style = {
       textAlign: "center",
-      fontFamily: "Roboto, sans-serif"
+      fontFamily: "Roboto, sans-serif",
+      marginTop: "5rem"
     }
 
     const hintStyle = {
       color: "#8a8c8c",
       fontStyle: "italic",
-      fontSize: ".9em"
+      fontSize: ".9em",
+      marginTop: "2.5rem"
     }
 
     if (this.state.questionIndex < 4) {
       return (
-        <div style={style}>
-          <h1>Recruiting Calculator</h1>
-          <h3>{this.state.questions[this.state.questionIndex]}</h3>
+        <div className="container" style={style}>
+          <h2 className="tagline-line1">
+            <strong>Recruiting Calculator</strong>
+          </h2>
+          <h2 className="tagline-line2">
+            {this.state.questions[this.state.questionIndex]}
+          </h2>
           <p style={hintStyle}>{this.state.hints[this.state.questionIndex]}</p>
           <Form handleSubmit={this.handleSubmit} />
         </div>
       )
     } else {
       return (
-        <div style={style}>
+        <div className="container" style={style}>
           <Answers answers={this.state.answers} />
         </div>
       )
