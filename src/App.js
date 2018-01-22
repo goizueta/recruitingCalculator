@@ -18,7 +18,7 @@ class App extends React.Component {
         "(Examples: 10 or 100)",
         "(Example: 12 for a full year)",
         "(Example: 15)",
-        "(100 if you want to double in a year)"
+        "(Example: 50 if you want to grow by 50%)"
       ],
       answers: []
     }
