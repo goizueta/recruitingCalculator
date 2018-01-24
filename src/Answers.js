@@ -1,6 +1,15 @@
 import React from "react"
 import { LineChart } from "react-easy-chart"
 import { Legend } from "react-easy-chart"
+import { curveCatmullRom } from "d3-shape"
+import {
+  XYPlot,
+  XAxis,
+  YAxis,
+  HorizontalGridLines,
+  VerticalGridLines,
+  LineSeries
+} from "react-vis"
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider"
 import simulate from "./utils.js"
 import MonthTable from "./MonthTable"
@@ -27,7 +36,7 @@ export default class Answers extends React.Component {
       worst_months: returnObj.worst_company_history,
       currMonth: 0,
       showToolTip: false,
-      windowWidth: initialWidth / 2,
+      mobile: false,
       attrition: this.props.answers[2]
     }
 
@@ -64,9 +73,11 @@ export default class Answers extends React.Component {
   }
 
   handleResize() {
-    window.innerWidth > 600
-      ? this.setState({ windowWidth: window.innerWidth / 2 })
-      : this.setState({ windowWidth: window.innerWidth * 0.7 })
+    if (window.innerWidth < 600) {
+      this.setState({ mobile: true })
+    } else {
+      this.setState({ mobile: false })
+    }
   }
 
   render() {
@@ -100,26 +111,18 @@ export default class Answers extends React.Component {
       marginTop: "3rem"
     }
 
-    const scrollDown = {
-      marginTop: "20rem"
-    }
-
-    const scrollWayDown = {
-      marginTop: "40rem"
-    }
-
     const legendData = [
       {
         key: this.state.attrition + "% Attrition (10th percentile)",
         value: 300,
-        color: "#4A6670"
+        color: "#12939A"
       },
       {
         key: this.state.attrition + "% Attrition (median)",
         value: 200,
-        color: "#668F80"
+        color: "#79C7E3"
       },
-      { key: "0% Attrition", value: 100, color: "#C3B59F" }
+      { key: "0% Attrition", value: 100, color: "#1A3177" }
     ]
 
     const buttonStyle = {
@@ -131,9 +134,9 @@ export default class Answers extends React.Component {
     }
 
     const config = [
-      { color: "#4A6670" },
-      { color: "#668F80" },
-      { color: "#C3B59F" }
+      { color: "#12939A" },
+      { color: "#79C7E3" },
+      { color: "#1A3177" }
     ]
 
     const headerStyle = {
@@ -144,21 +147,47 @@ export default class Answers extends React.Component {
       return (
         <div className="container">
           <div className="row">
-            <h2 className="tagline-line1">Projected Hiring Forecast</h2>
+            <h2 className="tagline-line1">
+              <strong>Projected Hiring Forecast</strong>
+            </h2>
             <h2 className="tagline-line2">after 1000 simulations</h2>
-            <div style={yAxisStyle}>
-              <h6>Hires</h6>
-            </div>
-            <LineChart
-              axes
-              lineColors={["#4A6670", "#668F80", "#C3B59F"]}
-              margin={{ top: 10, right: 10, bottom: 25, left: 60 }}
-              axisLabels={{ x: "NOT WORKING", y: "NOT WORKING" }}
-              grid
-              width={this.state.windowWidth}
-              height={this.state.windowWidth / 2}
-              data={this.data}
-            />
+            <XYPlot width={this.state.mobile ? 300 : 600} height={300}>
+              <HorizontalGridLines style={{ stroke: "#B7E9ED" }} />
+              <VerticalGridLines style={{ stroke: "#B7E9ED" }} />
+              <XAxis
+                title="Months"
+                style={{
+                  line: { stroke: "#ADDDE1" },
+                  ticks: { stroke: "#ADDDE1" },
+                  text: { stroke: "none", fill: "#6b6b76", fontWeight: 600 }
+                }}
+              />
+              <YAxis title="Hires" />
+              <LineSeries
+                className="first-series"
+                data={this.data[0]}
+                style={{
+                  strokeLinejoin: "round",
+                  strokeWidth: 4
+                }}
+              />
+              <LineSeries
+                className="second-series"
+                data={this.data[1]}
+                style={{
+                  strokeLinejoin: "round",
+                  strokeWidth: 4
+                }}
+              />
+              <LineSeries
+                className="third-series"
+                data={this.data[2]}
+                style={{
+                  strokeLinejoin: "round",
+                  strokeWidth: 4
+                }}
+              />
+            </XYPlot>
             <div>
               <h6>Months</h6>
             </div>
@@ -177,32 +206,44 @@ export default class Answers extends React.Component {
               <a href=".">go back to the beginning.</a>
             </h2>
           </div>
-          <h2 className="tagline-line1" style={scrollDown}>
-            Summary
-          </h2>
-          <div style={leftIndent}>
-            Over {this.props.answers[1]} months
-            <p>
-              You will most likely lose{" "}
-              <span style={redStyle}>{this.state.med_lost} employees</span>
-            </p>
-            <p>
-              ... and have to hire{" "}
-              <span style={boldStyle}>
-                {this.state.months[this.state.months.length - 1].length -
-                  this.props.answers[0]}{" "}
-              </span>
-              planned employees to hit your growth targets.
-            </p>
-            <p>
-              This means hiring a total of
-              <span style={greenStyle}> {this.state.med_hired} employees</span>.
-            </p>
+          <div className="row">
+            <div className="four columns">
+              <h2 className="tagline-line3">
+                <strong>Summary</strong>
+              </h2>
+              <div style={leftIndent}>
+                Over {this.props.answers[1]} months
+                <p>
+                  You will most likely lose{" "}
+                  <span style={redStyle}>{this.state.med_lost} employees</span>
+                </p>
+                <p>
+                  ... and have to hire{" "}
+                  <span style={boldStyle}>
+                    {this.state.months[this.state.months.length - 1].length -
+                      this.props.answers[0]}{" "}
+                  </span>
+                  planned employees to hit your growth targets.
+                </p>
+                <p>
+                  This means hiring a total of
+                  <span style={greenStyle}>
+                    {" "}
+                    {this.state.med_hired} employees
+                  </span>.
+                </p>
+              </div>
+            </div>
+            <div className="eight columns">
+              <h2 className="tagline-line3">
+                <strong>Monthly Hiring Plan</strong>
+              </h2>
+              <MonthTable
+                med_months={this.data[0]}
+                worst_months={this.data[2]}
+              />
+            </div>
           </div>
-          <h2 className="tagline-line1" style={scrollWayDown}>
-            Monthly Hiring Plan
-          </h2>
-          <MonthTable med_months={this.data[0]} worst_months={this.data[2]} />
         </div>
       )
     } else {
@@ -234,7 +275,7 @@ export default class Answers extends React.Component {
       return (
         <div className="container">
           <h2 className="tagline-line1">
-            Simulating {this.props.answers[1]} Months ...
+            <strong>Simulating {this.props.answers[1]} Months ...</strong>
           </h2>
           <h2 className="tagline-line2">
             After {this.state.currMonth + 1} Months <br />

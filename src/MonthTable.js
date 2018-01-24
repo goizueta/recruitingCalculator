@@ -54,8 +54,6 @@ export default class MonthTable extends React.Component {
         }
 
         const centerStyle = {
-            marginLeft: "25%",
-            marginRight: "25%",
             marginBottom: "10rem"
         }
 

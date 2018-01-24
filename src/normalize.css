@@ -442,3 +442,11 @@ h2.tagline-line2 {
   line-height: 2.4rem;
   margin-top: 2.5rem;
 }
+
+h2.tagline-line3 {
+  font-size: 1.2em;
+  margin-bottom: 0em;
+  text-align: center;
+  line-height: 3rem;
+  margin-top: 2.5rem;
+}

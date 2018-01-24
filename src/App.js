@@ -2,6 +2,7 @@ import React from "react"
 import Questions from "./Questions"
 import "./normalize.css"
 import "./skeleton.css"
+import "./d3Style.css"
 
 class App extends React.Component {
   constructor() {
