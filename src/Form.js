@@ -5,7 +5,7 @@ export default class Form extends React.Component {
     super(props)
     this.state = {
       value: "",
-      disabled: false
+      disabled: true
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -14,7 +14,7 @@ export default class Form extends React.Component {
 
   handleChange(event) {
     var re = /^[0-9]+$/
-    if (re.test(event.target.value) || event.target.value === "") {
+    if (re.test(event.target.value)) {
       this.setState({ value: event.target.value, disabled: false })
     } else {
       this.setState({ value: event.target.value, disabled: true })
@@ -44,7 +44,13 @@ export default class Form extends React.Component {
           <br />
           <input type="submit" value="Submit" disabled={this.state.disabled} />
         </form>
-        <p hidden={!this.state.disabled} style={redStyle}>
+        <p
+          hidden={
+            !this.state.disabled ||
+            (this.state.value === "" && this.state.disabled)
+          }
+          style={redStyle}
+        >
           Please enter only numeric digits.
         </p>
       </div>

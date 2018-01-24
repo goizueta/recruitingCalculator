@@ -27,7 +27,8 @@ export default class Answers extends React.Component {
       worst_months: returnObj.worst_company_history,
       currMonth: 0,
       showToolTip: false,
-      windowWidth: initialWidth / 2
+      windowWidth: initialWidth / 2,
+      attrition: this.props.answers[2]
     }
 
     var line_one = [] //with attrition
@@ -85,14 +86,14 @@ export default class Answers extends React.Component {
 
     const leftIndent = {
       textAlign: "left",
-      marginRight: "20%",
-      marginRight: "20%",
       textSize: "2em"
     }
 
     const yAxisStyle = {
-      textAlign: "left",
-      marginBottom: "0px"
+      marginBottom: "-6rem",
+      marginTop: "4rem",
+      marginRight: "80%",
+      transform: "rotate(-90deg)"
     }
 
     const topMargin = {
@@ -109,12 +110,12 @@ export default class Answers extends React.Component {
 
     const legendData = [
       {
-        key: this.props.answers[2] + "% Attrition (10th percentile)",
+        key: this.state.attrition + "% Attrition (10th percentile)",
         value: 300,
         color: "#4A6670"
       },
       {
-        key: this.props.answers[2] + "% Attrition (median)",
+        key: this.state.attrition + "% Attrition (median)",
         value: 200,
         color: "#668F80"
       },
@@ -142,24 +143,40 @@ export default class Answers extends React.Component {
     if (this.state.currMonth >= this.props.answers[1]) {
       return (
         <div className="container">
-          <h2 className="tagline-line1">Projected Hiring Forecast</h2>
-          <h2 className="tagline-line2">after 1000 simulations</h2>
-          <h6 style={yAxisStyle}>Total New Hires</h6>
-          <LineChart
-            axes
-            lineColors={["#4A6670", "#668F80", "#C3B59F"]}
-            margin={{ top: 10, right: 10, bottom: 25, left: 60 }}
-            axisLabels={{ x: "NOT WORKING", y: "NOT WORKING" }}
-            grid
-            width={this.state.windowWidth}
-            height={this.state.windowWidth / 2}
-            data={this.data}
-          />
-          <div>
-            <p>Months</p>
+          <div className="row">
+            <h2 className="tagline-line1">Projected Hiring Forecast</h2>
+            <h2 className="tagline-line2">after 1000 simulations</h2>
+            <div style={yAxisStyle}>
+              <h6>Hires</h6>
+            </div>
+            <LineChart
+              axes
+              lineColors={["#4A6670", "#668F80", "#C3B59F"]}
+              margin={{ top: 10, right: 10, bottom: 25, left: 60 }}
+              axisLabels={{ x: "NOT WORKING", y: "NOT WORKING" }}
+              grid
+              width={this.state.windowWidth}
+              height={this.state.windowWidth / 2}
+              data={this.data}
+            />
+            <div>
+              <h6>Months</h6>
+            </div>
           </div>
-
-          <Legend data={legendData} dataId={"key"} config={config} horizontal />
+          <div className="row">
+            <Legend
+              data={legendData}
+              dataId={"key"}
+              config={config}
+              horizontal
+            />
+          </div>
+          <div className="row">
+            <h2 className="tagline-line2">
+              Scroll down for more info, or&nbsp;
+              <a href=".">go back to the beginning.</a>
+            </h2>
+          </div>
           <h2 className="tagline-line1" style={scrollDown}>
             Summary
           </h2>
