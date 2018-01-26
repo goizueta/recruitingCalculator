@@ -10,9 +10,10 @@ import {
   VerticalGridLines,
   LineSeries
 } from "react-vis"
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider"
 import simulate from "./utils.js"
 import MonthTable from "./MonthTable"
+import FaQuestionCircle from "react-icons/lib/fa/question-circle"
+import ReactTooltip from "react-tooltip"
 
 export default class Answers extends React.Component {
   constructor(props) {
@@ -129,19 +130,16 @@ export default class Answers extends React.Component {
       margin: 12
     }
 
-    const h4Style = {
-      color: "grey"
-    }
-
     const config = [
       { color: "#12939A" },
       { color: "#79C7E3" },
       { color: "#1A3177" }
     ]
 
-    const headerStyle = {
-      marginTop: "4 rem"
-    }
+    const tooltipContent =
+      "We assign employees an equal chance of leaving every month, based on your yearly attrition rate.<br />" +
+      "The simulations run through each month, backfilling employees that leave.<br />" +
+      "We then sort the simulations by total attrition and show you the median."
 
     if (this.state.currMonth >= this.props.answers[1]) {
       return (
@@ -150,7 +148,19 @@ export default class Answers extends React.Component {
             <h2 className="tagline-line1">
               <strong>Projected Hiring Forecast</strong>
             </h2>
-            <h2 className="tagline-line2">after 1000 simulations</h2>
+            <h2 className="tagline-line2">
+              after 1000 simulations{" "}
+              <FaQuestionCircle
+                data-class="tooltip"
+                data-tip={tooltipContent}
+              />
+              <ReactTooltip
+                multiline={true}
+                place="bottom"
+                type="info"
+                effect="solid"
+              />
+            </h2>
             <XYPlot width={this.state.mobile ? 300 : 600} height={300}>
               <HorizontalGridLines style={{ stroke: "#B7E9ED" }} />
               <VerticalGridLines style={{ stroke: "#B7E9ED" }} />
@@ -184,13 +194,10 @@ export default class Answers extends React.Component {
                 data={this.data[2]}
                 style={{
                   strokeLinejoin: "round",
-                  strokeWidth: 4
+                  strokeWidth: 2
                 }}
               />
             </XYPlot>
-            <div>
-              <h6>Months</h6>
-            </div>
           </div>
           <div className="row">
             <Legend

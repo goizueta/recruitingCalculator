@@ -450,3 +450,7 @@ h2.tagline-line3 {
   line-height: 3rem;
   margin-top: 2.5rem;
 }
+
+.tooltip {
+  font-size: 2rem !important;
+}
