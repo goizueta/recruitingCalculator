@@ -1,13 +1,4 @@
 import React from "react"
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider"
-import {
-    Table,
-    TableBody,
-    TableHeader,
-    TableHeaderColumn,
-    TableRow,
-    TableRowColumn
-} from "material-ui/Table"
 
 export default class MonthTable extends React.Component {
     constructor(props) {
@@ -22,11 +13,11 @@ export default class MonthTable extends React.Component {
             }
         }
 
-        for (var i = worst_months.length - 1; i > -1; i--) {
-            if (i !== 0) {
-                worst_months[i].y -= worst_months[i - 1].y
+        for (var j = worst_months.length - 1; j > -1; j--) {
+            if (j !== 0) {
+                worst_months[j].y -= worst_months[j - 1].y
             }
-            med_months[i].z = worst_months[i].y
+            med_months[j].z = worst_months[j].y
         }
 
         this.state = {
@@ -36,51 +27,32 @@ export default class MonthTable extends React.Component {
 
     render() {
         const TRow = ({ row }) => (
-            <TableRow>
-                <TableRowColumn>{row.x}</TableRowColumn>
-                <TableRowColumn>{row.y}</TableRowColumn>
-            </TableRow>
+            <tr>
+                <td>{row.x}</td>
+                <td>{row.y}</td>
+            </tr>
         )
 
-        const tableHeight = "21em"
-
-        const headerStyle = {
-            fontSize: "1.2em"
-        }
-
-        const leftHeaderStyle = {
-            fontSize: "1.2em",
-            width: "3em"
-        }
-
         const centerStyle = {
-            marginBottom: "10rem"
+            marginLeft: "auto",
+            marginRight: "auto"
         }
 
         return (
             <div style={centerStyle}>
-                <MuiThemeProvider>
-                    <Table height={tableHeight}>
-                        <TableHeader
-                            adjustForCheckbox={false}
-                            displaySelectAll={false}
-                        >
-                            <TableRow>
-                                <TableHeaderColumn style={leftHeaderStyle}>
-                                    Month
-                                </TableHeaderColumn>
-                                <TableHeaderColumn style={headerStyle}>
-                                    Hires (Median Case)
-                                </TableHeaderColumn>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {this.state.med_months.map(row => {
-                                return <TRow key={row.x} row={row} />
-                            })}
-                        </TableBody>
-                    </Table>
-                </MuiThemeProvider>
+                <table className="u-full_width" style={centerStyle}>
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Hires (Median Case)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {this.state.med_months.map(row => {
+                            return <TRow key={row.x} row={row} />
+                        })}
+                    </tbody>
+                </table>
             </div>
         )
     }

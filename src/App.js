@@ -19,16 +19,12 @@ class App extends React.Component {
       marginTop: "5rem"
     }
 
-    const topMargin = {
-      marginTop: "2.5rem"
-    }
-
     if (this.state.onboarding) {
       return (
         <div className="container" style={style}>
           <div className="row">
             <h2 className="tagline-line1">
-              <strong>RecruitCompute</strong>
+              <strong>Recruiting Calculator</strong>
             </h2>
           </div>
           <div className="row">

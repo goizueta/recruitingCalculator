@@ -1,7 +1,5 @@
 import React from "react"
-import { LineChart } from "react-easy-chart"
 import { Legend } from "react-easy-chart"
-import { curveCatmullRom } from "d3-shape"
 import {
   XYPlot,
   XAxis,
@@ -25,8 +23,6 @@ export default class Answers extends React.Component {
       Number(this.props.answers[2]),
       Number(this.props.answers[3])
     )
-
-    const initialWidth = window.innerWidth > 0 ? window.innerWidth : 500
 
     this.state = {
       med_hired: returnObj.med_hired,
@@ -83,12 +79,12 @@ export default class Answers extends React.Component {
 
   render() {
     const greenStyle = {
-      color: "green",
+      color: "#12939A",
       fontWeight: "bold"
     }
 
     const redStyle = {
-      color: "red",
+      color: "#EF5D28",
       fontWeight: "bold"
     }
 
@@ -101,23 +97,12 @@ export default class Answers extends React.Component {
       textSize: "2em"
     }
 
-    const yAxisStyle = {
-      marginBottom: "-6rem",
-      marginTop: "4rem",
-      marginRight: "80%",
-      transform: "rotate(-90deg)"
-    }
-
-    const topMargin = {
-      marginTop: "3rem"
-    }
-
     const legendData = [
-      {
-        key: this.state.attrition + "% Attrition (10th percentile)",
-        value: 300,
-        color: "#12939A"
-      },
+      // {
+      //   key: this.state.attrition + "% Attrition (10th percentile)",
+      //   value: 300,
+      //   color: "#12939A"
+      // },
       {
         key: this.state.attrition + "% Attrition (median)",
         value: 200,
@@ -173,20 +158,22 @@ export default class Answers extends React.Component {
                 }}
               />
               <YAxis title="Hires" />
-              <LineSeries
-                className="first-series"
-                data={this.data[0]}
-                style={{
-                  strokeLinejoin: "round",
-                  strokeWidth: 4
-                }}
-              />
+              {
+                // <LineSeries
+                //   className="first-series"
+                //   data={this.data[0]}
+                //   style={{
+                //     strokeLinejoin: "round",
+                //     strokeWidth: 2
+                //   }}
+                // />
+              }
               <LineSeries
                 className="second-series"
                 data={this.data[1]}
                 style={{
                   strokeLinejoin: "round",
-                  strokeWidth: 4
+                  strokeWidth: 2
                 }}
               />
               <LineSeries
@@ -214,12 +201,12 @@ export default class Answers extends React.Component {
             </h2>
           </div>
           <div className="row">
-            <div className="four columns">
+            <div className="six columns">
               <h2 className="tagline-line3">
                 <strong>Summary</strong>
               </h2>
               <div style={leftIndent}>
-                Over {this.props.answers[1]} months
+                <p>Over {this.props.answers[1]} months</p>
                 <p>
                   You will most likely lose{" "}
                   <span style={redStyle}>{this.state.med_lost} employees</span>
@@ -241,7 +228,7 @@ export default class Answers extends React.Component {
                 </p>
               </div>
             </div>
-            <div className="eight columns">
+            <div className="six columns">
               <h2 className="tagline-line3">
                 <strong>Monthly Hiring Plan</strong>
               </h2>
@@ -260,8 +247,6 @@ export default class Answers extends React.Component {
 
       var row = ""
       var companySize = this.state.months[this.state.currMonth].length
-      var lostEmployees = 0
-      var newEmployees = 0
 
       for (var i = 0; i < companySize; i++) {
         var employeeAge = this.state.months[this.state.currMonth][i]
@@ -271,29 +256,35 @@ export default class Answers extends React.Component {
           (employeeAge === 0 && nextEmployeeAge == null)
         ) {
           row += "➕"
-          newEmployees++
         } else if (employeeAge === 0) {
           row += "💀"
-          lostEmployees++
         } else {
           row += "👩‍💼" //Math.random() > 0.5 ? "👨‍💼" : "👩‍💼"
         }
       }
       return (
         <div className="container">
-          <h2 className="tagline-line1">
-            <strong>Simulating {this.props.answers[1]} Months ...</strong>
-          </h2>
-          <h2 className="tagline-line2">
-            After {this.state.currMonth + 1} Months <br />
-          </h2>
-          <p style={leftIndent}>{row}</p>
-          <p style={leftIndent}>
-            👩‍💼 = 1 employee &nbsp;&nbsp;&nbsp;&nbsp; ➕ = 1 hired employee
-            &nbsp;&nbsp;&nbsp;&nbsp; 💀 = 1 lost employee <br />
-            Total Company Size: {companySize} <br />
-          </p>
-          <MuiThemeProvider>
+          <div className="row">
+            <h2 className="tagline-line1">
+              <strong>Simulating {this.props.answers[1]} Months ...</strong>
+            </h2>
+            <h2 className="tagline-line2">
+              After {this.state.currMonth + 1} Months <br />
+            </h2>
+          </div>
+          <div className="row">
+            <h2 className="tagline-line2" style={leftIndent}>
+              {row}
+            </h2>
+          </div>
+          <div className="row">
+            <p style={leftIndent}>
+              👩‍💼 = 1 employee &nbsp;&nbsp;&nbsp;&nbsp; ➕ = 1 hired employee
+              &nbsp;&nbsp;&nbsp;&nbsp; 💀 = 1 lost employee <br />
+              Total Company Size: {companySize} <br />
+            </p>
+          </div>
+          <div className="row">
             <button
               style={buttonStyle}
               onClick={function() {
@@ -303,7 +294,7 @@ export default class Answers extends React.Component {
             >
               Skip
             </button>
-          </MuiThemeProvider>
+          </div>
         </div>
       )
     }

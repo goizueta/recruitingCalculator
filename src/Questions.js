@@ -1,5 +1,4 @@
 import React from "react"
-import PropTypes from "prop-types"
 import Form from "./Form"
 import Answers from "./Answers"
 
@@ -45,10 +44,6 @@ class Questions extends React.Component {
       marginTop: "2.5rem"
     }
 
-    const topMargin = {
-      marginTop: "2.5rem"
-    }
-
     if (this.state.questionIndex < 4) {
       return (
         <div className="container" style={style}>
@@ -79,9 +74,5 @@ class Questions extends React.Component {
     }
   }
 }
-
-Questions.propTypes = {}
-
-Questions.defaultProps = {}
 
 export default Questions

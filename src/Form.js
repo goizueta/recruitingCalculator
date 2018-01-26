@@ -23,7 +23,7 @@ export default class Form extends React.Component {
 
   handleSubmit(event) {
     this.props.handleSubmit(this.state.value)
-    this.setState({ value: "" })
+    this.setState({ value: "", disabled: true })
     event.preventDefault()
   }
 
@@ -40,6 +40,7 @@ export default class Form extends React.Component {
             type="text"
             value={this.state.value}
             onChange={this.handleChange}
+            maxlength="4"
           />
           <br />
           <input type="submit" value="Submit" disabled={this.state.disabled} />
